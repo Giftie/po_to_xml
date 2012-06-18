@@ -19,6 +19,7 @@ po_translator = '''"Last-Translator: (.*?) <(.*?)>\\\\n"'''
 po_language = '''"Language: (.*?)\\\\n"'''
 po_string_id = '''msgctxt "#(.*?)"'''
 po_string = '''msgstr "(.*?)"'''
+po_alt_string = '''msgid "(.*?)"'''
 
 class Converter():
     def __init__( self ):
@@ -90,6 +91,10 @@ class Converter():
                         match2 = re.search( po_string, po_file[i + 2] )
                         if match2:
                             s = match2.group(1)
+                            if not s:
+                                match2 = re.search( po_alt_string, po_file[i + 1] )
+                                if match2:
+                                    s = match2.group(1)
                         _string["id"] = s_id
                         _string["text"] = s
                         _strings.append( _string )
