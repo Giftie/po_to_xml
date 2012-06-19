@@ -88,22 +88,33 @@ class Converter():
                     match = re.search( po_string_id, po_file[i] )
                     if match:
                         s_id = match.group(1)
-                        match2 = re.search( po_string, po_file[i + 2] )
-                        count = 2
+                        match2 = re.search( po_alt_string, po_file[i + 1] )
+                        empty_msgid = False
                         if match2:
-                            s = match2.group(1)
-                        else:
-                            count = 0
-                            for l in range( len( po_file ) - i ):
-                                match2 = re.search( po_string, po_file[i + l] )
-                                if match2:
+                            if match2.group(1):
+                                empty_msgid = False
+                                match3 = re.search( po_string, po_file[i + 2] )
+                                count = 2
+                                if match3:
+                                    s = match3.group(1)
+                            else:
+                                empty_msgid = True
+                                count = 0
+                                for l in range( len( po_file ) - i ):
+                                    match3 = re.search( po_string, po_file[i + l] )
+                                    print l
+                                    if match3:
+                                        s = match3.group(1)
+                                        break
+                                    count = l
+                            if not s:
+                                if not empty_msgid:
                                     s = match2.group(1)
-                                    break
-                                count =+ 1
-                        if not s:
-                            match2 = re.search( po_alt_string, po_file[i + 1] )
-                            if match2:
-                                s = match2.group(1)
+                                else:
+                                    temp_string = ""
+                                    for b in range( count ):
+                                        temp_string = temp_string + ( ( po_file[i + b + 2].lstrip('"') ).rstrip('"\n') ).rstrip("msgstr ")
+                                    s = temp_string
                         _string["id"] = s_id
                         _string["text"] = s
                         _strings.append( _string )
