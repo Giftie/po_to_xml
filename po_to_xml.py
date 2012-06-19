@@ -89,22 +89,31 @@ class Converter():
                     if match:
                         s_id = match.group(1)
                         match2 = re.search( po_string, po_file[i + 2] )
+                        count = 2
                         if match2:
                             s = match2.group(1)
-                            if not s:
-                                match2 = re.search( po_alt_string, po_file[i + 1] )
+                        else:
+                            count = 0
+                            for l in range( len( po_file ) - i ):
+                                match2 = re.search( po_string, po_file[i + l] )
                                 if match2:
                                     s = match2.group(1)
+                                    break
+                                count =+ 1
+                        if not s:
+                            match2 = re.search( po_alt_string, po_file[i + 1] )
+                            if match2:
+                                s = match2.group(1)
                         _string["id"] = s_id
                         _string["text"] = s
                         _strings.append( _string )
-                        i=+2
+                        i=+count
             except Exception, e:
                 traceback.print_exc()
                 print e
                 continue
             try:
-                xml_file_path = os.path.join( os.path.dirname( language_path ), "string.xml" ).replace( "\\\\", "\\" )
+                xml_file_path = os.path.join( os.path.dirname( language_path ), "strings.xml" ).replace( "\\\\", "\\" )
                 xml_file = codecs.open( xml_file_path, "w", "utf-8" )
                 xml_file.write( xml_header )
                 xml_file.write( ( xml_project % project ) )
