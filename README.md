@@ -16,6 +16,7 @@ To run the script, start the from the folder containing the po_to_xml.py file in
 
 This should also run on OSX(just not sure the method(probably similar to Linux)
 
+The full path is needed for the script to convert.  If there is a space in the path, the double quotes are needed.
 The script will then search through the language folders and convert the strings.po to a compatible strings.xml file, overwriting the old strings.xml file
 
 This script should work on all addon types, including skins.
